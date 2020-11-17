@@ -362,6 +362,8 @@ cfg_if! {
         // to "pthread" needs to be added.
         #[link(name = "pthread")]
         extern {}
+    } else if #[cfg(target_os = "unikraft")] {
+        // leave linking to Unikraft's build system
     } else if #[cfg(target_env = "illumos")] {
         #[link(name = "c")]
         #[link(name = "m")]
@@ -1627,6 +1629,9 @@ cfg_if! {
     } else if #[cfg(target_os = "hermit")] {
         mod hermit;
         pub use self::hermit::*;
+    } else if #[cfg(target_os = "unikraft")] {
+        mod linux_like;
+        pub use self::linux_like::*;
     } else if #[cfg(target_os = "redox")] {
         mod redox;
         pub use self::redox::*;
