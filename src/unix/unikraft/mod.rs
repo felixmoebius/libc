@@ -29,7 +29,7 @@ pub type nlink_t = u16;
 pub type blksize_t = c_long;
 pub type blkcnt_t = c_long;
 pub type stat64 = stat;
-pub type clockid_t = c_ulong;
+pub type clockid_t = c_int;
 pub type pthread_t = pte_handle_t;
 pub type pthread_attr_t = usize;
 pub type pthread_cond_t = usize;
@@ -42,9 +42,10 @@ pub type pthread_rwlockattr_t = usize;
 
 s_no_extra_traits! {
     pub struct dirent {
-        pub d_ino: ::c_long,
-        pub d_off: off_t,
+        pub d_ino: ::ino_t,
+        pub d_off: ::off_t,
         pub d_reclen: u16,
+        pub d_dtype: u8,
         pub d_name: [::c_char; 256],
     }
 
@@ -475,6 +476,9 @@ s! {
 
     pub struct utsname {}
 }
+
+// New
+pub const AT_FDCWD: ::c_int = -100;
 
 pub const AF_UNSPEC: ::c_int = 0;
 pub const AF_INET: ::c_int = 2;
@@ -1031,4 +1035,27 @@ extern "C" {
 
     pub fn setgroups(ngroups: ::c_int, grouplist: *const ::gid_t) -> ::c_int;
     pub fn uname(buf: *mut ::utsname) -> ::c_int;
+    pub fn preadv(
+        fd: ::c_int,
+        iov: *const ::iovec,
+        iovcnt: ::c_int,
+        offset: ::off_t,
+    ) -> ::ssize_t;
+
+    pub fn writev(
+        fd: ::c_int,
+        iov: *const ::iovec,
+        iovcnt: ::c_int,
+    ) -> ::ssize_t;
+
+    pub fn pthread_set_name_np(tid: ::pthread_t, name: *const ::c_char);
+
+    pub fn pthread_condattr_getclock(
+        attr: *const pthread_condattr_t,
+        clock_id: *mut clockid_t,
+    ) -> ::c_int;
+    pub fn pthread_condattr_setclock(
+        attr: *mut pthread_condattr_t,
+        clock_id: ::clockid_t,
+    ) -> ::c_int;
 }
