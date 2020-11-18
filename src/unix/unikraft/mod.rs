@@ -44,7 +44,7 @@ s_no_extra_traits! {
         pub d_ino: ::ino_t,
         pub d_off: ::off_t,
         pub d_reclen: u16,
-        pub d_dtype: u8,
+        pub d_type: u8,
         pub d_name: [::c_char; 256],
     }
 
@@ -1051,7 +1051,7 @@ extern "C" {
         iov: *const ::iovec,
         iovcnt: ::c_int,
     ) -> ::ssize_t;
-    
+
     pub fn pthread_set_name_np(tid: ::pthread_t, name: *const ::c_char);
 
     pub fn pthread_condattr_getclock(
