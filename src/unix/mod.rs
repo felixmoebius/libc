@@ -1630,8 +1630,8 @@ cfg_if! {
         mod hermit;
         pub use self::hermit::*;
     } else if #[cfg(target_os = "unikraft")] {
-        mod linux_like;
-        pub use self::linux_like::*;
+        mod unikraft;
+        pub use self::unikraft::*;
     } else if #[cfg(target_os = "redox")] {
         mod redox;
         pub use self::redox::*;

@@ -1696,15 +1696,9 @@ cfg_if! {
     } else if #[cfg(target_os = "linux")] {
         mod linux;
         pub use self::linux::*;
-    } else if #[cfg(target_os = "unikraft")] {
-        mod linux;
-        pub use self::linux::*;
     } else if #[cfg(target_os = "android")] {
         mod android;
         pub use self::android::*;
-    } else if #[cfg(target_os = "unikraft")] {
-        mod linux;
-        pub use self::linux::*;
     } else {
         // Unknown target_os
     }
