@@ -1046,7 +1046,12 @@ extern "C" {
         iov: *const ::iovec,
         iovcnt: ::c_int,
     ) -> ::ssize_t;
-
+    pub fn readv(
+        fd: ::c_int,
+        iov: *const ::iovec,
+        iovcnt: ::c_int,
+    ) -> ::ssize_t;
+    
     pub fn pthread_set_name_np(tid: ::pthread_t, name: *const ::c_char);
 
     pub fn pthread_condattr_getclock(
