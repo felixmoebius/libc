@@ -144,12 +144,6 @@ cfg_if! {
 
         mod hermit;
         pub use hermit::*;
-    } else if #[cfg(target_os = "unikraft")] {
-        mod fixed_width_ints;
-        pub use fixed_width_ints::*;
-
-        mod unix;
-        pub use unix::*;
     } else if #[cfg(all(target_env = "sgx", target_vendor = "fortanix"))] {
         mod fixed_width_ints;
         pub use fixed_width_ints::*;

@@ -13,18 +13,18 @@ pub type wchar_t = i32;
 
 pub type speed_t = ::c_uint;
 pub type mode_t = u32;
-pub type dev_t = i16;
-pub type nfds_t = ::c_ulong;
+pub type dev_t = u64;
+pub type nfds_t = ::c_uint;
 pub type socklen_t = u32;
 pub type sa_family_t = u8;
-pub type clock_t = c_ulong;
+pub type clock_t = c_long;
 pub type time_t = c_long;
 pub type suseconds_t = c_long;
 pub type off_t = i64;
 pub type rlim_t = ::c_ulonglong;
 pub type sigset_t = ::c_ulong;
-pub type ino_t = u16;
-pub type nlink_t = u16;
+pub type ino_t = u64;
+pub type nlink_t = u32;
 pub type blksize_t = c_long;
 pub type blkcnt_t = c_long;
 pub type stat64 = stat;
@@ -83,21 +83,24 @@ s_no_extra_traits! {
     pub struct stat {
         pub st_dev: ::dev_t,
         pub st_ino: ::ino_t,
-        pub st_mode: ::mode_t,
         pub st_nlink: ::nlink_t,
+
+        pub st_mode: ::mode_t, 
         pub st_uid: ::uid_t,
         pub st_gid: ::gid_t,
+        __pad0: u32,
         pub st_rdev: dev_t,
         pub st_size: off_t,
+
+        pub st_blksize: blksize_t,
+        pub st_blocks: blkcnt_t,
+
         pub st_atime: time_t,
         pub st_atime_nsec: ::c_long,
         pub st_mtime: time_t,
         pub st_mtime_nsec: ::c_long,
         pub st_ctime: time_t,
         pub st_ctime_nsec: ::c_long,
-        pub st_blksize: blksize_t,
-        pub st_blocks: blkcnt_t,
-        pub st_spare4: [::c_long; 2],
     }
 }
 
@@ -305,11 +308,6 @@ cfg_if! {
                     && self.st_ctime_nsec == other.st_ctime_nsec
                     && self.st_blksize == other.st_blksize
                     && self.st_blocks == other.st_blocks
-                    && self
-                    .st_spare4
-                    .iter()
-                    .zip(other.st_spare4.iter())
-                    .all(|(a,b)| a == b)
             }
         }
         impl Eq for stat {}
@@ -332,7 +330,6 @@ cfg_if! {
                     .field("st_ctime_nsec", &self.st_ctime_nsec)
                     .field("st_blksize", &self.st_blksize)
                     .field("st_blocks", &self.st_blocks)
-                    // FIXME: .field("st_spare4", &self.st_spare4)
                     .finish()
             }
         }
@@ -354,7 +351,6 @@ cfg_if! {
                 self.st_ctime_nsec.hash(state);
                 self.st_blksize.hash(state);
                 self.st_blocks.hash(state);
-                self.st_spare4.hash(state);
             }
         }
     }
@@ -644,7 +640,7 @@ pub const F_CNVT: ::c_int = 12;
 pub const F_RSETLKW: ::c_int = 13;
 pub const F_DUPFD_CLOEXEC: ::c_int = 14;
 
-pub const FD_SETSIZE: usize = 1024;
+pub const FD_SETSIZE: usize = 64;
 
 // Dummy
 pub const FIOCLEX: ::c_int = 0x5451;

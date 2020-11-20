@@ -119,7 +119,7 @@ s! {
         #[cfg(all(target_arch = "x86_64", target_pointer_width = "32"))]
         __pad14: u32,
 
-        #[cfg(any(target_env = "musl", target_os = "emscripten"))]
+        #[cfg(any(target_env = "musl", target_os = "emscripten", target_os = "unikraft"))]
         __reserved: [c_long; 16],
     }
 
